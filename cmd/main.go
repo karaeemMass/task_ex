@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net"
+	"task_ex/internal/interceptor"
 
 	"google.golang.org/grpc"
 
@@ -28,7 +29,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(interceptor.AuthInterceptor),
+	)
 	pb.RegisterTaskServiceServer(grpcServer, handler)
 
 	log.Println("gRPC server running on port", port)
