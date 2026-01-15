@@ -26,6 +26,9 @@ func NewMySQLDB() (*gorm.DB, error) {
 	if err := db.AutoMigrate(&model.Task{}); err != nil {
 		return nil, err
 	}
+	if err := db.AutoMigrate(&model.User{}); err != nil {
+		return nil, err
+	}
 
 	return db, nil
 }
