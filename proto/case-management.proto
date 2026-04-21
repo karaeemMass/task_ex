@@ -1,0 +1,1787 @@
+syntax = "proto3";
+
+option go_package = "github.com/mas-soft/case-management/api;api";
+
+package casemanagement.v1;
+
+// import "google/protobuf/struct.proto";
+
+// ============================================================================
+// =============================  ENUMS  ======================================
+// ============================================================================
+
+// SeverityLevel represents the severity level of cases, crimes, and verdicts
+enum SeverityLevel {
+  SEVERITY_LEVEL_UNSPECIFIED = 0;
+  SEVERITY_LEVEL_LOW = 1; // منخفض
+  SEVERITY_LEVEL_MODERATE = 2; // متوسط
+  SEVERITY_LEVEL_HIGH = 3; // عالي
+  SEVERITY_LEVEL_CRITICAL = 4; // حرج
+}
+
+// CaseTypeCategory represents the category of case type
+enum CaseTypeCategory {
+  CASE_TYPE_CATEGORY_UNSPECIFIED = 0;
+  CASE_TYPE_CATEGORY_CRIMINAL = 1; // جنائي
+  CASE_TYPE_CATEGORY_CIVIL = 2; // مدني
+}
+
+// EmploymentStatus represents the employment status of citizens
+// حالة التوظيف
+enum EmploymentStatus {
+  EMPLOYMENT_STATUS_UNSPECIFIED = 0;
+  EMPLOYMENT_STATUS_ACTIVE = 1; // نشط
+  EMPLOYMENT_STATUS_INACTIVE = 2; // غير نشط
+  EMPLOYMENT_STATUS_SUSPENDED = 3; // موقوف
+  EMPLOYMENT_STATUS_RETIRED = 4; // متقاعد
+}
+
+// VerdictType represents the type of verdict
+// نوع الحكم
+enum VerdictType {
+  VERDICT_TYPE_UNSPECIFIED = 0;
+  VERDICT_TYPE_ACQUITTAL = 1; // براءة
+  VERDICT_TYPE_CONVICTION = 2; // إدانة
+}
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE = 1;
+  GENDER_FEMALE = 2;
+}
+// VerdictCategory represents the category of verdict
+// فئة الحكم
+enum VerdictCategory {
+  VERDICT_CATEGORY_UNSPECIFIED = 0;
+  VERDICT_CATEGORY_DISCIPLINARY = 1; // تأديبي
+  VERDICT_CATEGORY_ADMINISTRATIVE = 2; // إداري
+  VERDICT_CATEGORY_CRIMINAL = 3; // جنائي
+}
+
+// InputType represents the type of input field for additional verdict data
+// نوع حقل الإدخال
+enum InputType {
+  INPUT_TYPE_UNSPECIFIED = 0;
+  INPUT_TYPE_TEXT = 1; // نص
+  INPUT_TYPE_NUMBER = 2; // رقم
+  INPUT_TYPE_TEXTAREA = 3; // نص طويل
+  INPUT_TYPE_SELECT = 4; // قائمة منسدلة
+}
+
+enum InputUnit {
+  UNIT_UNSPECIFIED = 0;
+  UNIT_DAYS = 1;
+  UNIT_WEEKS = 2;
+  UNIT_MONTHS = 3;
+  UNIT_YEARS = 4;
+}
+
+
+enum DisciplinaryCategory {
+  DISCIPLINARY_CATEGORY_UNSPECIFIED = 0;
+  DISCIPLINARY_CATEGORY_WARNING = 1; // إنذار
+  DISCIPLINARY_CATEGORY_SUSPENSION = 2; // إيقاف مؤقت
+  DISCIPLINARY_CATEGORY_TERMINATION = 3; // فصل نهائي
+  DISCIPLINARY_CATEGORY_OTHER = 4;
+}
+
+enum CaseRquestType {
+  CASE_TYPE_NULL = 0;
+  CASE_TYPE_COMPLAINT = 1;
+  CASE_TYPE_REPORT = 2;
+}
+enum LegalDocumentType {
+  // غير محدد (القيمة الافتراضية)
+  LEGAL_DOCUMENT_TYPE_UNSPECIFIED = 0;
+  // مذكرة النيابة
+  PROSECUTION_MEMORANDUM = 1;
+  // نموذج الفحص
+  INSPECTION_FORM = 2;
+  // القرار التأديبي
+  DISCIPLINARY_DECISION = 3;
+  // القرار التنفيذي
+  EXECUTIVE_DECISION = 4;
+  // مذكرة الطعن
+  APPEAL_MEMORANDUM = 5;
+  // حكم المحكمة
+  COURT_JUDGMENT = 6;
+  // تظلم
+  GRIEVANCE_PETITION = 7;
+  // صوره بطاقه
+  ID_CARD_PHOTO = 8;
+  // تقرير الاتهام
+  ACCUSATION_REPORT = 9;
+}
+
+
+enum RequestType {
+  REQUEST_TYPE_NULL = 0;
+  REQUEST_TYPE_VERIFY_DATA_ENTRY = 1; // يتم من الاسكان الي محقق الورق
+  REQUEST_TYPE_DATA_ENTRY = 2; // يتم من محقق الورق الي مدخل البيانات
+  REQUEST_TYPE_SCAN = 3; // يتم  ارجاعه الي عمليه الاسكان
+  REQUEST_TYPE_REVIEW = 4; // يتم من مدخل البيانات الي المحقق النهائي للقضيه
+  REQUEST_TYPE_APPROVED = 5; // يتم من المحقق النهائي  لاعتماده بالنظام
+  REQUEST_TYPE_INFO_DATA = 6; // يتم من المحقق النهائي او النظام لاستكمال بيانات ما بعد الميتا كطعن او قرار تنفيذي
+  REQUEST_TYPE_REMOVE_LAST_TASK = 7; // حذف التاسك الاخيره
+  REQUEST_TYPE_REMOVE_TO_FIRST_TASK = 8; // العوده الي التاسك الاول
+}
+enum ActionType {
+  ACTION_TYPE_NULL = 0;
+  ACTION_TYPE_SCAN = 1;
+  ACTION_TYPE_APPROVE_SCAN = 2;
+  ACTION_TYPE_REJECT_SCAN = 3;
+  ACTION_TYPE_POST_META = 4;
+  ACTION_TYPE_APPROVE_META = 5;
+  ACTION_TYPE_REJECT_META = 6;
+  ACTION_TYPE_POST_INFO_OBJECTION = 7;
+  ACTION_TYPE_POST_INFO_EXECUTION = 8;
+  ACTION_TYPE_REMOVE_TASKS = 9;
+  ACTION_TYPE_REJECT_APPROVE_SCAN = 10;
+}
+// ============================================================================
+// SERVICES
+// ============================================================================
+
+// CaseTypesService handles case types, crime types, verdicts, and citizens
+service CaseManagementService {
+
+  // New RPC for Employee Target Report
+  rpc GetEmpTargetReports(GetEmpTargetReportsRequest) returns (GetEmpTargetReportsResponse);
+
+  // for maintainance
+  rpc ListUsers(Empty) returns (ListUserResponse);
+  // Case Types
+  rpc ListCaseTypes(ListCaseTypesRequest) returns (ListCaseTypesResponse);
+  rpc GetCaseType(GetCaseTypeRequest) returns (CaseType);
+  rpc CreateCaseType(CreateCaseTypeRequest) returns (CaseType);
+  rpc UpdateCaseType(UpdateCaseTypeRequest) returns (CaseType);
+  rpc DeleteCaseType(DeleteCaseTypeRequest) returns (Empty);
+
+  // Crime Types
+  rpc ListCrimeTypes(ListCrimeTypesRequest) returns (ListCrimeTypesResponse);
+  rpc GetCrimeType(GetCrimeTypeRequest) returns (CrimeType);
+  rpc CreateCrimeType(CreateCrimeTypeRequest) returns (CrimeType);
+  rpc UpdateCrimeType(UpdateCrimeTypeRequest) returns (CrimeType);
+  rpc DeleteCrimeType(DeleteCrimeTypeRequest) returns (Empty);
+
+  // Crime Types
+  rpc ListSettings(Empty) returns (ListSettingsResponse);
+  rpc GetSetting(GetSettingRequest) returns (Setting);
+  rpc UpdateSetting(Setting) returns (Empty);
+
+  // Verdicts
+  rpc ListVerdicts(ListVerdictsRequest) returns (ListVerdictsResponse);
+  rpc GetVerdict(GetVerdictRequest) returns (Verdict);
+  rpc CreateVerdict(CreateVerdictRequest) returns (Verdict);
+  rpc UpdateVerdict(UpdateVerdictRequest) returns (Verdict);
+  rpc DeleteVerdict(DeleteVerdictRequest) returns (Empty);
+
+  // Disciplinary Decisions
+  rpc ListDisciplinaryDecisions(ListDisciplinaryDecisionsRequest) returns (ListDisciplinaryDecisionsResponse);
+  rpc GetDisciplinaryDecision(GetDisciplinaryDecisionRequest) returns (DisciplinaryDecision);
+  rpc CreateDisciplinaryDecision(CreateDisciplinaryDecisionRequest) returns (DisciplinaryDecision);
+  rpc UpdateDisciplinaryDecision(UpdateDisciplinaryDecisionRequest) returns (DisciplinaryDecision);
+  rpc DeleteDisciplinaryDecision(DeleteDisciplinaryDecisionRequest) returns (Empty);
+
+  // Citizens
+  rpc ListCitizens(ListCitizensRequest) returns (ListCitizensResponse);
+  rpc GetCitizen(GetCitizenRequest) returns (Citizen);
+  rpc CreateCitizen(CreateCitizenRequest) returns (Citizen);
+  rpc UpdateCitizen(UpdateCitizenRequest) returns (Citizen);
+  rpc DeleteCitizen(DeleteCitizenRequest) returns (Empty);
+  rpc SearchCitizensByName(SearchCitizensByNameRequest) returns (SearchCitizensByNameResponse);
+
+  // case execute decision
+  rpc ListExecutDecision(ListExecutDecisionRequest) returns (ListExecutDecisionResponse);
+  rpc ListCasesWithoutExecutDecision(Empty) returns (GetCasesResponse);
+  rpc ListCasesWithoutAllExecutDecision(Empty) returns (GetCasesResponse);
+  rpc GetExecutDecision(GetExecutDecisionRequest) returns (ExecutDecision);
+  rpc CreateExecutDecision(CreateExecutDecisionRequest) returns (CreateExecutDecisionRequest);
+  rpc UpdateExecutDecision(ExecutDecision) returns (ExecutDecision);
+  rpc DeleteExecutDecision(DeleteExecutDecisionRequest) returns (Empty);
+
+  // Case Request
+  rpc GetCase(GetCaseRequest) returns (CaseSubject);
+  rpc GetCaseDetail(GetCaseRequest) returns (CaseSubjectDetail);
+  rpc GetRejectedCases(RejectedCasesRequest) returns (RejectedCasesResponse);
+  rpc GetHistoryCasesRequest(ListHistoryCasesRequset) returns (ListHistoryCasesResponse);
+  rpc GetListCasesRequest(ListCasesRequest) returns (ListCasesResponse);
+  rpc VerifyScanCaseApplication(VerifyCaseApplicationRequest) returns (VerifyScanCaseApplicationResponse);
+  rpc ApproveScanCaseApplication(ApproveScanCaseApplicationRequest) returns (ApproveScanCaseApplicationResponse);
+  rpc RejectScanCaseApplication(RejectScanCaseApplicationRequest) returns (RejectScanCaseApplicationResponse);
+  rpc RejectApproveScanCaseApplication(RejectApproveScanCaseApplicationRequest) returns (RejectApproveScanCaseApplicationResponse);
+  rpc PostMetaDataCaseApplication(PostMetaDataCaseApplicationRequest) returns (PostMetaDataCaseApplicationResponse);
+  rpc ReviewCaseApplication(ReviewCaseApplicationRequest) returns (ReviewCaseApplicationResponse);
+  rpc GetCases(GetCasesRequest) returns (GetCasesResponse);
+  rpc SaveDocuments(SaveDocumentsRequest) returns (Empty);
+  rpc DeleteDocument(DeleteDocumentRequest) returns (Empty);
+  rpc GetCasesInUserTaskRun(GetCasesInUserTaskRunRequest) returns (GetCasesInUserTaskRunResponse);
+  rpc RemoveTasksCases(RemoveTasksCasesRequest) returns (Empty);
+  rpc SaveDraftRequest(DraftRequest) returns (Empty);
+  rpc GetDraft(GetDraftRequest) returns (DraftRequest);
+
+  // record requests
+  rpc SendRequestForDisciplinaryRecordCitizen(SendRequestForRecordRequest) returns (SendRequestForRecordResponse);
+  rpc GetDisciplinaryRecordRequests(DisciplinaryRecordFilter) returns (DisciplinaryRecordsResponse);
+  rpc GetDisciplinaryRecordRequest(GetDisciplinaryRecordRequestID) returns (DisciplinaryRecordsResponseItem);
+  rpc ConfirmDisciplinaryRecordRequest(ConfirmDisciplinaryRecord) returns (Empty);
+  rpc PrintRecord(PrintRecordRequest) returns (DisciplinaryRecordCitizenResponse);
+
+  //reports
+  rpc GetCountRefuseAcceptCase(CountRefuseAcceptCaseRequest) returns (CountRefuseAcceptCaseResponse);
+  rpc GetTotalPagesForCases(TotalPagesForCasesRequest) returns (TotalPagesForCasesResponse);
+  rpc GetRawDataUserCases(RawDataUserCasesRequest) returns (RawDataUserCasesResponse);
+  rpc CountScanned(Empty) returns (CountScannedResponse);
+  rpc GetDisciplinaryRecordCitizen(DisciplinaryRecordCitizenRequest) returns (DisciplinaryRecordCitizenResponse);
+  rpc GetDisciplinaryRecordCitizenWithCrimes(DisciplinaryRecordCitizenRequest) returns (DisciplinaryRecordCitizenCrimeResponse);
+  rpc RunningCounts(RunningCountsRequest) returns (RunningCountsResponse);
+  rpc RunningMyCounts(RunningCountsRequest) returns (RunningCountsResponse);
+  rpc DashboradCounts(RunningCountsRequest) returns (RunningCountsResponse);
+  rpc GetDisciplinaryDecisionReports(GetDisciplinaryDecisionReportsRequest) returns (GetDisciplinaryDecisionReportsResponse);
+  rpc GetVerdictReports(GetVerdictReportsRequest) returns (GetVerdictReportsResponse);
+  rpc GetJobGradeReports(GetJobGradeReportsRequest) returns (GetJobGradeReportsResponse);
+  rpc GetMinistryReports(GetMinistryReportsRequest) returns (GetMinistryReportsResponse);
+  rpc GetMetaReports(GetMetaReportsRequest) returns (GetMetaReportsResponse);
+  rpc GetGenderReports(GetGenderReportsRequest) returns (GetGenderReportsResponse);
+  rpc GetCaseTypesReports(GetCaseTypesReportsRequest) returns (GetCaseTypesReportsResponse);
+  rpc GetCrimeTypesReports(GetCrimeTypesReportsRequest) returns (GetCrimeTypesReportsResponse);
+  rpc GetCitizenMoreCasesReports(GetCitizenMoreCasesReportsRequest) returns (GetCitizenMoreCasesReportsResponse);
+  rpc RunDashboard(RunDashboardRequest) returns (RunDashboardResponse);
+
+  //Objections
+  rpc CreateObjection(CreateObjectionRequest) returns (CreateObjectionRequest);
+  rpc ListObjections(ObjectionsFilter) returns (ListObjectionsResponse);
+  rpc GetObjection(GetObjectionRequest) returns (Objection);
+  rpc UpdateObjection(UpdateObjectionRequest) returns (Objection);
+  rpc DeleteObjection(DeleteObjectionRequest) returns (Empty);
+
+  //Case Objections
+  rpc ListCasesWithoutAllObjections(ObjectionTypeRequest) returns (GetCasesResponse);
+  //search
+  rpc Info(Empty) returns (MessageInfo);
+  rpc ForceRefresh(ForceEntity) returns (MessageInfo);
+}
+
+// ============================================================================
+// COMMON MESSAGES
+// ============================================================================
+
+
+//#############################################################################
+// ===========================================================================
+// EMPLOYEE TARGET REPORT MESSAGES
+// ===========================================================================
+
+message GetEmpTargetReportsRequest {
+  optional int64 from_date = 1;
+  optional int64 to_date = 2;
+  optional string user_id = 3; // Optional filter by specific employee
+}
+
+message GetEmpTargetReportsResponse {
+  repeated EmpTargetReportItem items = 1;
+}
+
+message EmpTargetReportItem {
+  string user_id = 1;
+  string user_name = 2;             // اسم الموظف
+  string site_id = 3;              // معرف الجهة الحكومية
+  string gov_id = 4;
+  int64 target_date = 5;          // تاريخ الاستهداف
+  string team_type = 6;
+
+  int32 quality_cases = 7;
+  int32 quality_case_defs = 8;
+  int32 meta_pages = 9;
+  int32 meta_docs = 10;
+  int32 meta_cases = 11;
+  int32 meta_case_defs = 12;
+  int32 pages = 13;
+  int32 docs = 14;
+  int32 cases = 15;
+
+}
+//#############################################################################
+
+// Empty message for operations that don't return data
+message Empty {}
+
+message MessageInfo {
+  string Version = 1;
+}
+
+message  GetCasesInUserTaskRunRequest {
+  string user_id = 1;
+}
+
+// ============================================================================
+// CASE TYPES
+// ============================================================================
+
+
+// CaseType represents a type of legal case
+// نوع القضية
+message CaseType {
+  string id = 1;
+  string name = 2;
+  optional string code = 4;
+  string description = 5;
+  SeverityLevel severity_level = 6;
+  bool is_active = 7;
+  int64 created_at = 8;
+  int64 updated_at = 9;
+}
+
+// Request to list case types with filters
+message ListCaseTypesRequest {
+  optional bool is_active = 1;              // Filter by active status
+  optional SeverityLevel severity_level = 2; // Filter by severity level
+}
+
+// Response containing list of case types
+message ListCaseTypesResponse {
+  repeated CaseType case_types = 1;
+  int32 total = 2; // Total count of items
+}
+
+// Request to get a single case type by ID
+message GetCaseTypeRequest {
+  string id = 1;
+}
+
+// Request to create a new case type
+message CreateCaseTypeRequest {
+  CaseType case_type = 1;
+}
+
+// Request to update an existing case type
+message UpdateCaseTypeRequest {
+  CaseType case_type = 1;
+}
+
+// Request to delete a case type
+message DeleteCaseTypeRequest {
+  string id = 1;
+}
+
+// ============================================================================
+// CRIME TYPES
+// ============================================================================
+
+// CrimeType represents a type of crime with legal details
+// نوع الجريمة
+message CrimeType {
+  string id = 1;
+  string name = 2;
+  optional string code = 4;
+  string description = 5;
+  optional string legal_description = 6;   // الوصف القانوني
+  optional string legal_articles = 7;      // المواد القانونية
+  string legal_reference = 8; // المرجع القانوني
+  optional string penalty_min = 9;         // الحد الأدنى للعقوبة
+  optional string penalty_max = 10;        // الحد الأقصى للعقوبة
+  optional CaseTypeCategory category = 11;
+  SeverityLevel severity_level = 12;
+  bool is_active = 13;
+  int64 created_at = 14;
+  int64 updated_at = 15;
+}
+
+// Request to list crime types with filters
+message ListCrimeTypesRequest {
+  optional bool is_active = 3;              // Filter by active status
+  optional SeverityLevel severity_level = 4; // Filter by severity level
+  optional string category = 5;             // Filter by category
+}
+
+// Response containing list of crime types
+message ListCrimeTypesResponse {
+  repeated CrimeType crime_types = 1;
+  int32 total = 2; // Total count of items
+}
+
+// Request to get a single crime type by ID
+message GetCrimeTypeRequest {
+  string id = 1;
+}
+
+// Request to create a new crime type
+message CreateCrimeTypeRequest {
+  CrimeType crime_type = 1;
+}
+
+// Request to update an existing crime type
+message UpdateCrimeTypeRequest {
+  CrimeType crime_type = 1;
+}
+
+// Request to delete a crime type
+message DeleteCrimeTypeRequest {
+  string id = 1;
+}
+
+// ============================================================================
+// VERDICTS
+// ============================================================================
+
+// AdditionalField represents a custom field for verdict data
+// حقل إضافي
+
+message AdditionalField {
+  string name = 1; // Field name (key)
+  string label = 2; // Display label
+  InputType type = 3; // Input type
+  optional InputUnit unit = 4;           // Unit of measurement (e.g., "days", "years")
+  optional double min = 5;            // Minimum value (for numbers)
+  optional double max = 6;            // Maximum value (for numbers)
+  optional string default_value = 7;  // Default value
+  bool required = 8;
+  optional string value = 9;     // Is this field required?
+}
+
+// Verdict represents a legal verdict or ruling
+// الحكم
+message Verdict {
+  string id = 1;
+  string name = 2;
+  optional string code = 4;
+  string description = 5;
+
+  VerdictType verdict_type = 6; // نوع الحكم
+  VerdictCategory category = 7; // فئة الحكم
+  optional string legal_reference = 9;          // المرجع القانوني
+
+  bool requires_additional_data = 10; // Does this verdict need extra data?
+  repeated AdditionalField additional_fields = 11;
+  bool is_active = 12;
+  optional int32 display_order = 13;            // Order for display in UI
+  int64 created_at = 14;
+  int64 updated_at = 15;
+}
+
+// Request to list verdicts with filters
+message ListVerdictsRequest {
+  optional bool is_active = 3;              // Filter by active status
+  optional VerdictType verdict_type = 4;    // Filter by verdict type
+  optional VerdictCategory category = 5;    // Filter by category
+}
+
+// Response containing list of verdicts
+message ListVerdictsResponse {
+  repeated Verdict items = 1;
+  int32 total = 2; // Total count of items
+}
+
+// Request to get a single verdict by ID
+message GetVerdictRequest {
+  string id = 1;
+}
+
+// Request to create a new verdict
+message CreateVerdictRequest {
+  Verdict verdict = 1;
+}
+
+// Request to update an existing verdict
+message UpdateVerdictRequest {
+  Verdict verdict = 1;
+}
+
+// Request to delete a verdict
+message DeleteVerdictRequest {
+  string id = 1;
+}
+
+
+// ============================================================================
+// DISCIPLINARY DECISIONS
+// ============================================================================
+
+// الطعون و التظلمات
+message CreateObjectionRequest {
+  optional string id = 1;
+  string case_id = 2;
+  ObjectionType objection_type = 3;
+  optional ObjectionStatus Objection_status = 4;
+}
+message Objection {
+  string id = 1;
+  string case_id = 2;
+  optional string created_by = 3;
+  optional string updated_by = 4;
+  optional int64 created_at = 5;
+  optional int64 updated_at = 6;
+  optional ObjectionStatus status = 7;
+  ObjectionType objection_type = 8;
+  optional string objection_number = 9;
+  optional int64 objection_date = 10;
+  optional string description = 11;
+  optional string formed_by_citizen_id = 12;
+  repeated CaseDefendant defendant = 13;
+}
+
+message ObjectionsFilter {
+  optional string case_id = 1;
+  optional string created_by = 2;
+  optional ObjectionStatus status = 3;
+  optional string objection_number = 4;
+  optional int64 objection_date = 5;
+  optional int32 pageNumber = 6;
+  optional int64 pageSize = 7;
+  optional ObjectionType objection_type = 8;
+  optional string formed_by_citizen_id = 9;
+  optional int64 from = 10;
+  optional int64 to = 11;
+}
+message ListObjectionsResponse {
+  repeated Objection objections = 1;
+  int64 total = 2;
+}
+
+message GetObjectionRequest {
+  string id = 1;
+}
+
+message UpdateObjectionRequest {
+  Objection objection = 1;
+}
+
+message DeleteObjectionRequest {
+  string id = 1;
+}
+
+enum ObjectionStatus {
+  OBJECTION_STATUS_UNSPECIFIED = 0;
+  OBJECTION_STATUS_PENDING = 1;
+  OBJECTION_STATUS_RESOLVED = 2;
+  OBJECTION_STATUS_REJECTED = 3;
+  OBJECTION_STATUS_DELETED = 4;
+}
+
+enum ObjectionType {
+  OBJECTION_TYPE_UNSPECIFIED = 0;
+  OBJECTION_TYPE_GRIEVANCE = 1;
+  OBJECTION_TYPE_APPEAL = 2;
+}
+
+enum PrintRecordType {
+  PRINT_RECORD_TYPE_UNSPECIFIED = 0;
+  PRINT_RECORD_TYPE_CITIZEN = 1;
+  PRINT_RECORD_TYPE_GOV = 2;
+}
+
+enum RecordStatus {
+  RECORD_STATUS_UNSPECIFIED = 0;
+  RECORD_STATUS_PENDING = 1;
+  RECORD_STATUS_APPROVED = 2;
+  RECORD_STATUS_REJECTED = 3;
+}
+
+// DisciplinaryDecision represents a disciplinary decision
+// القرار التأديبي
+message DisciplinaryDecision {
+  string id = 1;
+  string name = 2;
+  optional string code = 3;
+  string description = 4;
+  DisciplinaryCategory category = 5;
+  SeverityLevel severity_level = 6;
+  string legal_reference = 7; // المادة القانونية المرجعية
+  string penalty_description = 8; // وصف العقوبة
+  optional string duration_min = 9;           // المدة الدنيا (مثلاً بالأيام)
+  optional string duration_max = 10;           // المدة القصوى
+  bool is_active = 11;
+  optional int32 display_order = 12;
+  optional int64 expiration_days = 13; // تاريخ الانتهاء
+  repeated AdditionalField additional_fields = 14;
+}
+
+// Request to list disciplinary decisions with filters
+message ListDisciplinaryDecisionsRequest {
+  optional bool is_active = 1;              // Filter by active status
+  optional DisciplinaryCategory category = 2; // Filter by category
+}
+
+// Response containing list of disciplinary decisions
+message ListDisciplinaryDecisionsResponse {
+  repeated DisciplinaryDecision disciplinary_decisions = 1;
+  int32 total = 2;
+}
+
+// Request to get a single disciplinary decision by ID
+message GetDisciplinaryDecisionRequest {
+  string id = 1;
+}
+
+// Request to create a new disciplinary decision
+message CreateDisciplinaryDecisionRequest {
+  DisciplinaryDecision disciplinary_decision = 1;
+}
+
+// Request to update an existing disciplinary decision
+message UpdateDisciplinaryDecisionRequest {
+  DisciplinaryDecision disciplinary_decision = 1;
+}
+
+// Request to delete a disciplinary decision
+message DeleteDisciplinaryDecisionRequest {
+  string id = 1;
+}
+
+// ============================================================================
+// CITIZENS
+// ============================================================================
+
+// Citizen represents a government employee or citizen involved in cases
+// المواطن/الموظف الحكومي
+
+message Citizen {
+  string id = 1;
+  string national_id = 2; // الرقم الوطني
+  string full_name = 3; // الاسم الكامل
+  string position = 4; // المنصب
+  optional string department = 5;      // القسم - TODO: USE ENUM
+  string government_id = 6; // معرف الجهة الحكومية
+  optional string government_name = 7; // اسم الجهة الحكومية
+  EmploymentStatus employment_status = 8; // حالة التوظيف
+  optional string email = 9;
+  optional string phone = 10;
+  optional string address = 11;
+  string notes = 12; // ملاحظات
+  optional int64 birth_date = 13;      // تاريخ الميلاد
+  optional int64 employment_date = 14; // تاريخ التوظيف
+  int64 created_at = 15;
+  int64 updated_at = 16;
+  Gender gender = 17;
+  JobGrade job_grade = 18; //الدرجه الوظبفية
+  optional int32 age = 19;
+}
+
+// Request to list citizens with filters
+message ListCitizensRequest {
+  optional string government_id = 3;            // Filter by government entity
+  optional EmploymentStatus employment_status = 4; // Filter by employment status
+  optional string department = 5;               // Filter by department
+}
+
+// Response containing list of citizens
+message ListCitizensResponse {
+  repeated Citizen citizens = 1;
+  int32 total = 2; // Total count of items
+}
+
+// Request to get a single citizen by ID
+message GetCitizenRequest {
+  string id = 1;
+}
+
+// Request to create a new citizen
+message CreateCitizenRequest {
+  Citizen citizen = 1;
+}
+
+// Request to update an existing citizen
+message UpdateCitizenRequest {
+  Citizen citizen = 1;
+}
+
+// Request to delete a citizen
+message DeleteCitizenRequest {
+  string id = 1;
+}
+
+
+// ============================================================================
+
+// Case Request Tasks
+
+message GetCaseRequest {
+  string case_id = 1;
+  optional bool with_tasks = 2;
+  optional bool old_meta = 3;
+}
+
+message ListCasesRequest {
+  optional CaseNumber case_no = 1;
+  optional string case_application_id = 2;
+  optional string created_by_user_id = 3;
+  optional int64 created_at_from = 4;
+  optional int64 created_at_to = 5;
+  optional RequestType request_type = 6;
+  optional string site_id = 7;
+  optional string user_id = 8;
+  optional string team_id = 9;
+}
+
+message RejectedCasesRequest {
+  optional string created_by_user_id = 1;
+  optional int64 created_at_from = 2;
+  optional int64 created_at_to = 3;
+  optional string site_id = 4;
+  optional string team_id = 5;
+  optional RequestType case_in_step = 6;
+  optional string user_id = 7;
+}
+
+message RejectedCasesResponse {
+  repeated RejectedCasesItem reject_cases = 1;
+}
+message RejectedCasesItem {
+  string case_id = 1;
+  repeated Document docs = 2;
+  CaseNumber case_no = 3;
+  string site_id = 4;
+  string case_ref = 5;
+}
+message DocumentCase {
+  string id = 1;
+  DocumentStatus status = 2;
+  optional string reject_reason = 3;
+}
+
+message ListHistoryCasesRequset {
+  string case_id = 1;
+}
+
+message ListHistoryCasesResponse {
+  repeated ListHistoryCase history = 1;
+}
+
+message ListHistoryCase {
+  string user_name = 1;
+  string user_id = 2;
+  int64 task_date = 3;
+  string description = 4;
+  string notes = 5;
+  int64 duration_entry = 6;
+  RequestType request_type = 7;
+  bool is_current = 8;
+}
+
+
+message ListCasesResponse {
+  repeated CaseTask tasks = 1;
+}
+
+message CaseTask {
+  string id = 1;
+  optional string case_id = 2;
+  optional string user_id = 3;
+  optional string team_id = 4;
+  RequestType request_type = 5;
+  string site_id = 6;
+  string stamp_user_id = 7;
+  optional bool closed = 8;
+  optional string closed_by = 9;
+  optional string from_api = 10;
+  optional int64 updated_at = 11;  // Unix timestamp
+  optional int64 created_at = 12;  // Unix timestamp
+  string governorate = 13;
+  string prosecution = 14;
+  int64  year = 15;
+  string number = 16;
+  string case_number_ref = 17; // رقم القضية بالصيغة النصية
+  optional CaseSubject case = 18;
+  optional string site_name = 19;
+  optional string team_name = 20;
+  optional string user_name = 21;
+  optional string stamp_user_name = 22;
+  optional string governorate_name = 23;
+  optional string prosecution_name = 24;
+  optional bool must_enter_execute = 25;
+  optional bool must_enter_objection = 26;
+  optional bool must_enter_Tazalom = 27;
+}
+
+message CaseRequest {
+  RequestType request_type = 1;
+  optional CaseSubject case = 2;
+}
+
+message VerifyScanCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+
+message VerifyCaseApplicationRequest {
+  CaseRequest application = 1;
+}
+
+message RejectScanCaseApplicationRequest {
+  repeated RejectedDocument rejected_documents = 1;
+  string case_id = 2;
+  string notes = 3;
+}
+
+message RejectApproveScanCaseApplicationRequest {
+  string case_id = 1;
+  string notes = 2;
+}
+
+message RejectScanCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+
+message RejectApproveScanCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+message ApproveScanCaseApplicationRequest {
+  optional CaseNumber case_no = 1;
+  optional string case_id = 2;
+}
+
+message ApproveScanCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+
+message ReviewCaseApplicationRequest {
+  optional CaseNumber case_no = 1;
+  optional string case_id = 2;
+  bool approved = 3;
+  string notes = 4;
+  bool reject_meta = 5;
+  bool reject_execute = 6;
+  bool reject_objection = 7;
+}
+
+message ReviewCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+
+message PostMetaDataCaseApplicationRequest {
+  CaseRequest application = 1;
+  int64 duration_entry = 2;
+}
+
+message PostMetaDataCaseApplicationResponse {
+  CaseNumber case_no = 1;
+  string case_application_id = 2;
+  string case_id = 3;
+  string message = 4;
+}
+
+// Case Info - represents a legal case
+
+// القضية نفسها
+message CaseSubject {
+  string id = 1; // معرف القضية
+  CaseNumber case_number = 2; // رقم القضية
+  CheckNumber check_number = 3; // رقم المحضر
+  PenaltyDecisionNumber penalty_decision_number = 4; // رقم القرار التأديبي
+  string case_number_ref = 5; // رقم القضية بالصيغة النصية
+  string check_number_ref = 6; // رقم المحضر بالصيغة النصية
+  string penalty_decision_number_ref = 7; // رقم القرار التأديبي بالصيغة النصية
+  optional string judgement_number = 8; // رقم الحكم
+  optional string case_inv_number = 9;
+  string case_type = 10; // نوع القضية
+  CaseStatus status = 11; // حالة القضية
+  optional SeverityLevel severity = 12; // شدة القضية
+  optional string title = 13; // عنوان القضية
+  optional string description = 14; // وصف القضية
+  optional int64 incident_date = 15;        // تاريخ الواقعة
+  optional int64 judgement_date = 16;    // تاريخ الحكم
+  optional int64 disciplinary_decision_date = 17; // تاريخ القرار التأديبي
+  string site_id = 18; // جهة الاختصاص
+  string site_name = 19; // الجهة الحكومية
+  optional string notes = 20; // ملاحظات إضافية
+  optional string created_by = 21; // المستخدم الذي أنشأ القضية
+  int64 created_at = 22; // تاريخ الإنشاء
+  int64 updated_at = 23; // تاريخ التحديث
+  repeated CaseDefendant case_defendants = 24; // المتهمين في القضية
+  repeated Document documents = 25; // المستندات المتعلقة بالقضية
+  repeated CaseTask tasks = 26; // المهام المتعلقة بالقضية
+  int32 total_pages = 27;
+  SOURCE_TYPE source_type = 28;
+  DECISION_TYPE decision_type = 29;
+  repeated CaseDefendantCitizen history_citizen = 30;
+  optional int64 judgment_case_number = 31;
+  optional int64 judgment_case_year = 32;
+  optional string court_id = 33;
+  optional string scan_user = 34;
+  optional string scan_user_name = 35;
+  optional string approve_user_scan = 36;
+  optional string approve_user_scan_name = 37;
+  optional string meta_user = 38;
+  optional string meta_user_name = 39;
+  optional string approve_user = 40;
+  optional string approve_user_name = 41;
+  optional bool can_remove_task = 42;
+  string prosecution_name = 43;
+  string governorate_name = 44;
+}
+
+message CaseDefendantCitizen {
+  Citizen citizen = 1;
+  repeated CaseDefendant case_defendants = 2;
+}
+
+// مصدر القضية
+enum SOURCE_TYPE {
+  SOURCE_TYPE_UNSPECIFIED = 0;
+  SOURCE_TYPE_REPORT = 1;
+  SOURCE_TYPE_COMPLAINT = 2;
+}
+
+// نوع القرار
+enum DECISION_TYPE {
+  DECISION_TYPE_UNSPECIFIED = 0;
+  DECISION_TYPE_DISCIPLINARY = 1;
+  DECISION_TYPE_VERDICT = 2;
+  DECISION_TYPE_SAVE = 3;
+}
+
+// نوع الحفظ
+enum SAVE_TYPE {
+  SAVE_TYPE_UNSPECIFIED = 0;
+  SAVE_TYPE_NO_VIOLATION = 1;
+  SAVE_TYPE_INVALIDITY = 2;
+  SAVE_TYPE_IRRELEVANCE = 3;
+  SAVE_TYPE_INSUFFICIENT = 4;
+}
+
+// حالة القضية
+enum CaseStatus {
+  CASE_STATUS_UNSPECIFIED = 0;
+  CASE_STATUS_UNDER_ENTRY = 1; // تحت القيد
+  CASE_STATUS_UNDER_INVESTIGATION = 2; // قيد التحقيق
+  CASE_STATUS_CLOSED = 3; // مغلقة
+  CASE_STATUS_APPEALED = 4; // مستأنفة
+}
+
+// المتهم في القضية
+message CaseDefendant {
+  Citizen citizen = 1;
+  // one of verdict or disciplinary decision
+  optional string verdict_id = 2;
+  optional string verdict_description = 3;
+  optional string disciplinary_decision_id = 4;
+  optional string disciplinary_decision_description = 5;
+  repeated AdditionalField verdict_fields = 6;
+  optional string notes = 7;
+  repeated CaseCrime crimes = 8;
+  DECISION_TYPE decision_type = 9;
+  SAVE_TYPE save_type = 10;
+  optional string advoice = 11;
+  optional string case_defendant_id = 12;
+  optional int64 created_at = 13;
+  optional int64 count_history = 14;
+  optional bool is_original = 15;
+  optional ObjectionCase objection = 16;
+  optional int64 real_date = 17;
+}
+
+message ObjectionCase {
+  string id = 1;
+  optional ObjectionStatus status = 2;
+  ObjectionType objection_type = 3;
+  optional string objection_number = 4;
+  optional int64 objection_date = 5;
+  optional string description = 6;
+}
+
+
+// جريمة في القضية
+message CaseCrime {
+  string id = 1;
+  string description = 2;
+}
+
+message RejectedDocument {
+  string id = 1;
+  optional string case_id = 2;
+  optional string case_request_id = 3;
+  string file_name = 4;
+  string path = 5;
+  string bucket_name = 6;
+  string bucket_host = 7;
+  LegalDocumentType doc_type = 8;
+  int32 total_pages_number = 9;
+  optional string notes = 10;
+  optional string reject_reason = 11;
+}
+
+// المستندات المتعلقة بالقضية
+message Document {
+  string id = 1;
+  optional string case_id = 2;
+  optional string case_request_id = 3;
+  string file_name = 4;
+  string path = 5;
+  string bucket_name = 6;
+  string bucket_host = 7;
+  LegalDocumentType doc_type = 8;
+  int32 total_pages_number = 9;
+  DocumentStatus status = 10;
+  optional int64 created_at = 11;
+  optional int64 updated_at = 12;
+  optional string created_by_user = 13;
+  optional string updated_by_user = 14;
+  optional string notes = 15;
+  optional string reject_reason = 16;
+  optional string related_id = 17;
+}
+
+// حالة المستند
+enum DocumentStatus {
+  STATUS_NULL = 0;
+  STATUS_NEW = 1;
+  STATUS_UPLOADED = 2;
+  STATUS_IN_REVIEW = 3;
+  STATUS_APPROVED = 4;
+  STATUS_REJECTED = 5;
+}
+
+// رقم القضية
+message CaseNumber {
+  string governorate = 1;
+  string prosecution = 2;
+  int64  year = 3;
+  string number = 4;
+}
+
+message OptionalCaseNumber {
+  optional string governorate = 1;
+  optional string prosecution = 2;
+  optional int64  year = 3;
+  optional string number = 4;
+}
+
+message OptionalCheckNumber {
+  optional string governorate = 1;
+  optional	string office = 2;
+  optional	int64  year = 3;
+  optional string number = 4;
+}
+// رقم القرار التأديبي
+message PenaltyDecisionNumber {
+  string governorate = 1;
+  string office = 2;
+  int64  year = 3;
+  string number = 4;
+}
+
+// رقم المحضر
+message CheckNumber {
+  string governorate = 1;
+  string office = 2;
+  int64  year = 3;
+  string number = 4;
+}
+
+message GetCasesRequest {
+  optional OptionalCaseNumber case_no = 1;
+  optional string case_id = 2;
+  optional string created_by_user_id = 3;
+  optional int64 created_at_from = 4;
+  optional int64 created_at_to = 5;
+  optional string case_type = 6;
+  optional string site_id = 7;
+  optional int64 incident_date_from = 8;
+  optional int64 incident_date_to = 9;
+  optional string case_no_ref = 10;
+  optional SeverityLevel severity = 11;
+  optional string citizen_id = 12;
+  optional string gov_site_id = 13;
+  optional string disciplinary_decision_id = 14;
+  optional string verdict_id = 15;
+  optional DECISION_TYPE decision_type = 16;
+  optional OptionalCheckNumber check_number = 17;
+}
+
+message GetCasesResponse {
+  repeated CaseSubject cases = 1;
+}
+
+message CountRefuseAcceptCaseRequest {
+  int64 form_date = 1;
+  int64 to_date = 2;
+}
+
+message CountRefuseAcceptCaseResponse {
+  int64 count_refused_scan = 1;
+  int64 count_refused_meta = 2;
+  int64 count_accepted = 3;
+}
+
+
+enum JobGrade {
+  JOB_GRADE_UNSPECIFIED = 0; // غير محدد
+  GRADE_EXCELLENT = 1; // الدرجة الممتازة
+  GRADE_HIGHER = 2; // الدرجة العالية
+  GRADE_FIRST = 3; // الدرجة الأولى
+  GRADE_SECOND = 4; // الدرجة الثانية
+  GRADE_THIRD = 5; // الدرجة الثالثة
+  GRADE_FOURTH = 6; // الدرجة الرابعة
+  GRADE_FIFTH = 7; // الدرجة الخامسة
+  GRADE_SIXTH = 8; // الدرجة السادسة
+  GRADE_ON_PENSION = 9; // الدرجة علي المعاش
+  GRADE_TEMP_CONTRACT = 10; // عقد مؤقت
+}
+message TotalPagesForCasesRequest {
+  int64 form_date = 1;
+  int64 to_date = 2;
+}
+
+message TotalPagesForCasesResponse {
+  repeated TotalPagesForCasesItem items = 1;
+}
+message TotalPagesForCasesItem {
+  string user_id = 1;
+  string user_name = 2;
+  string case_ref = 3;
+  int64 total_pages = 4;
+}
+message SearchCitizensByNameRequest {
+  string name = 1;
+  optional string gov_id = 2;
+}
+message SearchCitizensByNameResponse {
+  repeated Citizen citizens = 1;
+}
+
+message ListExecutDecisionRequest {
+  string case_id = 1;
+}
+message ListExecutDecisionResponse {
+  repeated ExecutDecision items = 1;
+}
+message CreateExecutDecisionRequest {
+  string id = 1;
+  string case_id = 2;
+  string citizen_id = 3;
+}
+message ExecutDecision {
+  string id = 1;
+  string case_id = 2;
+  string citizen_id = 3;
+  optional string executive_decision_number = 4; //رقم القرار التنفيذي
+  optional int64 executive_decision_date = 5; //تاريخ القرار التنفيذي
+  optional string  executive_decision_description = 6;   //وصف القرار التنفيذي
+  optional Citizen citizen = 7;
+  optional string case_number_ref = 8;
+  repeated AdditionalField verdict_fields = 9;
+  optional string case_defendant_id = 10;
+  optional Verdict verdict = 11;
+  optional DisciplinaryDecision disciplinary_decision = 12;
+}
+message GetExecutDecisionRequest {
+  string executive_id = 1;
+}
+message DeleteExecutDecisionRequest {
+  string executive_id = 1;
+}
+message SaveDocumentsRequest {
+  string case_id = 1;
+  string related_id = 2;
+  LegalDocumentType doc_type = 3;
+  repeated Document docs = 4;
+}
+
+message RawDataUserCasesRequest {
+  int64 form_date = 1;
+  int64 to_date = 2;
+}
+message RawDataUserCasesResponse {
+  repeated RawDataUserCasesItem items = 1;
+}
+message RawDataUserCasesItem {
+  optional string case_number_ref = 1;
+  string case_id = 2;
+  string site_id = 3;
+  string case_governorate = 4;
+  string user_id = 5;
+  int64 refused_count = 6;
+  int64 last_time = 7;
+  int64 take_time = 8;
+  int64 total_pages = 9;
+  int64 total_pages_number = 10;
+  string site_name = 11;
+  string gov_name = 12;
+  string user_name = 13;
+  string last_time_str = 14;
+}
+enum REFRESH_ENTITY {
+  REFRESH_ENTITY_NONE = 0;
+  REFRESH_ENTITY_EMP = 1;
+  REFRESH_ENTITY_AUTH = 2;
+  REFRESH_ENTITY_TEAM = 3;
+  REFRESH_ENTITY_GOV = 4;
+  REFRESH_ENTITY_SITE = 5;
+  REFRESH_ENTITY_USER = 6;
+}
+message ForceEntity {
+  REFRESH_ENTITY entity_name = 1;
+}
+message DeleteDocumentRequest {
+  string document_id = 1;
+}
+
+message DisciplinaryRecordCitizenRequest {
+  string citizen_id = 1;
+}
+message DisciplinaryRecordCitizenResponse {
+  repeated DisciplinaryRecordItem items = 1;
+  optional PrintCitizen citizen = 2;
+  optional int64 issue_date = 3;
+  optional string to_gov = 4;
+  optional int64 valid_to = 6;
+  optional string issue_date_string = 7;
+  optional string valid_to_string = 8;
+  optional string record_number = 9;
+  optional string notes = 10;
+  optional int64 record_no = 11;
+}
+message PrintCitizen {
+  optional string id = 1;
+  string national_id = 2; // الرقم الوطني
+  string full_name = 3; // الاسم الكامل
+  optional string position = 4;                 // المنصب
+  string government_id = 6; // معرف الجهة الحكومية
+  optional string government_name = 7; // اسم الجهة الحكومية
+  optional int64 birth_date = 13;      // تاريخ الميلاد
+  optional Gender gender = 17;
+  optional JobGrade job_grade = 18;   //الدرجه الوظبفية
+  optional int32 age = 19;
+}
+message DisciplinaryRecordItem {
+  string citizen_name = 1;
+  Gender citizen_gender = 2;
+  string citizen_address = 3;
+  string citizen_national_id = 4;
+  string citizen_position = 5;
+  string citizen_government_id = 6;
+  string citizen_government_name = 7; // full
+  JobGrade citizen_job_grade = 8;
+  string case_number_ref = 9;
+  string case_no = 10;
+  string case_governorate = 11;
+  string case_prosecution = 12;
+  int64 case_year = 13;
+  string case_gov_name = 14;
+  string case_prosecution_name = 15;
+  string verdit_description = 16;
+  string verdit_id = 17;
+  string verdit_name = 18;
+  DECISION_TYPE decision_type = 19;
+  int32 citizen_age = 20;
+  optional int64 verdict_date = 21;
+  optional string verdict_date_string = 22;
+}
+
+message SendRequestForRecordRequest {
+  //string citizen_id = 1;
+  string to_gov = 2;
+  string from_gov_id = 3;
+  PrintRecordType RecordRequest = 4;
+  string first_name = 5;
+  string second_name = 6;
+  string third_name = 7;
+  string fourth_name = 8;
+  string national_id = 9;
+  optional string position = 10;
+  optional JobGrade job_grade = 11;
+  optional string image_url = 12;
+}
+message SendRequestForRecordResponse {
+  string record_no = 3;
+}
+message DisciplinaryRecordFilter {
+  optional string id = 1;
+  optional string from_governorate_id = 2;
+  optional string citizen_id = 3;
+  optional int64 created_from = 4;
+  optional int64 created_to = 5;
+  optional int64 issued_from = 6;
+  optional int64 issued_to = 7;
+  bool is_valid = 8;
+  optional bool Closed = 9;
+  optional PrintRecordType record_type = 10;
+  optional RecordStatus status = 11;
+}
+message DisciplinaryRecordsResponse {
+  repeated DisciplinaryRecordsResponseItem items = 1;
+}
+message DisciplinaryRecordsResponseItem {
+  string id = 1;
+  string to_gov = 2;
+  optional string citizen_id = 3;
+  string user_id = 4;
+  optional int64 created_at = 5;
+  optional int64 issued_at = 6;
+  optional int64 valid_to = 7;
+  optional int64 last_print = 8;
+  optional int64 count_print =9;
+  bool closed = 10;
+  string user_name = 11;
+  optional Citizen citizen = 12;
+  PrintRecordType record_type = 13;
+  string from_gov_id = 14;
+  string from_gov = 15;
+  RecordStatus status = 16;
+  optional string position = 17;
+  optional JobGrade job_grade = 18;
+  string full_name = 19;
+  string national_id = 20;
+  repeated Citizen searched_citizens = 21;
+  optional string image_url = 22;
+}
+message PrintRecordRequest {
+  string id = 1;
+}
+message DisciplinaryRecordCitizenCrimeResponse {
+  repeated DisciplinaryRecordCrimeItem items = 1;
+}
+message DisciplinaryRecordCrimeItem {
+  string citizen_name = 1;
+  Gender citizen_gender = 2;
+  string citizen_address = 3;
+  string citizen_national_id = 4;
+  string citizen_position = 5;
+  string citizen_government_id = 6;
+  string citizen_government_name = 7;
+  JobGrade citizen_job_grade = 8;
+  string case_number_ref = 9;
+  string case_no = 10;
+  string case_governorate = 11;
+  string case_prosecution = 12;
+  int64 case_year = 13;
+  string case_gov_name = 14;
+  string case_prosecution_name = 15;
+  string verdit_description = 16;
+  string verdit_id = 17;
+  string verdit_name = 18;
+  DECISION_TYPE decision_type = 19;
+  int32 citizen_age = 20;
+  optional int64 verdict_date = 21;
+  optional string verdict_date_string = 22;
+  string crime_description = 23;
+  repeated Crime crimes = 24;
+  optional int64 incident_date = 25;
+  optional string incident_date_string = 26;
+  SOURCE_TYPE source_type = 27;
+  string case_id = 28;
+}
+message Crime {
+  string crime_name = 1;
+  string crime_description = 2;
+}
+message CountScannedResponse {
+  int64 total_scan_pages = 1;
+  int64 total_scan_cases = 2;
+  int64 total_meta_defenants = 3;
+  int64 total_meta_cases = 4;
+  repeated CountScanned sites = 5;
+  repeated CountScanned govs = 6;
+  repeated CountScanned users = 7;
+}
+message CountScanned {
+  string id = 1;
+  string name = 2;
+  int64 total_scan_pages = 3;
+  int64 total_scan_cases = 4;
+  int64 total_meta_defenants = 5;
+  int64 total_meta_cases = 6;
+}
+message ObjectionTypeRequest {
+  ObjectionType objection_type = 1;
+}
+message CaseSubjectDetail {
+  string id = 1; // معرف القضية
+  CaseNumber case_number = 2; // رقم القضية
+  CheckNumber check_number = 3; // رقم المحضر
+  PenaltyDecisionNumber penalty_decision_number = 4; // رقم القرار التأديبي
+  string case_number_ref = 5; // رقم القضية بالصيغة النصية
+  string check_number_ref = 6; // رقم المحضر بالصيغة النصية
+  string penalty_decision_number_ref = 7; // رقم القرار التأديبي بالصيغة النصية
+  optional string judgement_number = 8; // رقم الحكم
+  optional string case_inv_number = 9;
+  string case_type = 10; // نوع القضية
+  CaseStatus status = 11; // حالة القضية
+  optional SeverityLevel severity = 12; // شدة القضية
+  optional string title = 13; // عنوان القضية
+  optional string description = 14; // وصف القضية
+  optional int64 incident_date = 15;        // تاريخ الواقعة
+  optional int64 judgement_date = 16;    // تاريخ الحكم
+  optional int64 disciplinary_decision_date = 17; // تاريخ القرار التأديبي
+  string site_id = 18; // جهة الاختصاص
+  string site_name = 19; // الجهة الحكومية
+  optional string notes = 20; // ملاحظات إضافية
+  optional string created_by = 21; // المستخدم الذي أنشأ القضية
+  int64 created_at = 22; // تاريخ الإنشاء
+  int64 updated_at = 23; // تاريخ التحديث
+  repeated Document documents = 25; // المستندات المتعلقة بالقضية
+  repeated CaseTask tasks = 26; // المهام المتعلقة بالقضية
+  int32 total_pages = 27;
+  SOURCE_TYPE source_type = 28;
+  DECISION_TYPE decision_type = 29;
+  repeated CaseCitizen citizens = 30;
+  optional int64 judgment_case_number = 31;
+  optional int64 judgment_case_year = 32;
+  optional string court_id = 33;
+}
+message CaseCitizen {
+  Citizen citizen = 1;
+  optional CaseCitizenDefendant first_judgment = 2;
+  repeated CaseCitizeExecutDecision decisions = 3;
+  repeated CaseCitizeObjection objections = 4;
+}
+message CaseCitizenDefendant {
+  optional string verdict_id = 2;
+  optional string verdict_description = 3;
+  optional string disciplinary_decision_id = 4;
+  optional string disciplinary_decision_description = 5;
+  repeated AdditionalField verdict_fields = 6;
+  optional string notes = 7;
+  repeated CaseCrime crimes = 8;
+  DECISION_TYPE decision_type = 9;
+  SAVE_TYPE save_type = 10;
+  optional string advoice = 11;
+  optional string case_defendant_id = 12;
+  optional int64 created_at = 13;
+}
+message CaseCitizeObjection {
+  string id = 1;
+  string case_id = 2;
+  optional string created_by = 3;
+  optional string updated_by = 4;
+  optional int64 created_at = 5;
+  optional int64 updated_at = 6;
+  optional ObjectionStatus status = 7;
+  ObjectionType objection_type = 8;
+  optional string objection_number = 9;
+  optional int64 objection_date = 10;
+  optional string description = 11;
+  optional string formed_by_citizen_id = 12;
+  CaseCitizenDefendant defendant = 13;
+}
+message CaseCitizeExecutDecision {
+  string id = 1;
+  string case_id = 2;
+  string citizen_id = 3;
+  optional string executive_decision_number = 4; //رقم القرار التنفيذي
+  optional int64 executive_decision_date = 5; //تاريخ القرار التنفيذي
+  optional string  executive_decision_description = 6;   //وصف القرار التنفيذي
+  optional string case_number_ref = 8;
+  repeated AdditionalField verdict_fields = 9;
+  optional string case_defendant_id = 10;
+  optional Verdict verdict = 11;
+  optional DisciplinaryDecision disciplinary_decision = 12;
+}
+message RunningCountsRequest {
+  optional int64 from_date = 1;
+  optional int64 to_date = 2;
+  optional string team_id = 3;
+  optional string user_id = 4;
+  optional string site_id = 5;
+  optional string gov_id = 6;
+}
+message RunningCountsResponse {
+  repeated RunningCountsItem users = 1;
+  repeated RunningCountsItem teams = 2;
+  repeated RunningCountsItem sites = 3;
+  repeated RunningCountsItem prosecutions = 4;
+  repeated RunningCountsItem govs = 5;
+  int64 docs = 6;
+  int64 case_defs = 7;
+  int64 task_runs = 8;
+  int64 task_logs = 9;
+  int64 cases = 10;
+  int64 pages = 11;
+  int64 meta_case_defs = 12;
+  int64 meta_cases = 13;
+  int64 meta_docs = 14;
+  int64 meta_pages = 15;
+  int64 quality_case_defs = 16;
+  int64 quality_cases = 17;
+}
+message RunDashboardRequest {
+  optional int64 from_date = 1;
+  optional int64 to_date = 2;
+  RunDashboardEnum run_dashboard_enum = 3;
+}
+enum RunDashboardEnum {
+  RUN_DASHBOARD__GENERAL = 0;
+  RUN_DASHBOARD__GOVS = 1;
+  RUN_DASHBOARD__SITES = 2;
+  RUN_DASHBOARD__USERS = 3;
+}
+message RunDashboardResponse  {
+  repeated RunDashboardItem items = 1;
+}
+message RunDashboardItem {
+  string id = 1;
+  string name = 2;
+  RunDashboardBaseItem cur_scan = 3;
+  RunDashboardBaseItem cur_approve_scan = 4;
+  RunDashboardBaseItem cur_meta = 5;
+  RunDashboardBaseItem cur_quality = 6;
+  RunDashboardBaseItem closed = 7;
+  RunDashboardBaseItem total = 8;
+  RunDashboardEnum type = 9;
+  string team_type = 10;
+}
+message RunDashboardBaseItem {
+  int64 pages = 1;
+  int64 docs = 2;
+  int64 cases = 3;
+  int64 defs = 4;
+}
+message RunningCountsItem {
+  int64 docs = 1;
+  int64 case_defs = 2;
+  int64 task_runs = 3;
+  int64 task_logs = 4;
+  int64 cases = 5;
+  string id = 6;
+  string name = 7;
+  int64 pages = 8;
+  string team_type = 9;
+  int64 meta_case_defs = 10;
+  int64 meta_cases = 11;
+  int64 meta_docs = 12;
+  int64 meta_pages = 13;
+  int64 quality_case_defs = 14;
+  int64 quality_cases = 15;
+}
+message ListUserResponse {
+  repeated User users = 1;
+}
+message User {
+  string id = 1;
+  string email = 2;
+  string username = 3;
+  string employee_id = 6;
+  optional string full_name = 11;
+  string team_id = 12;
+  string team_name = 13;
+  string team_type = 14;
+  string site_id = 15;
+  string gov_id = 16;
+  string site_name = 17;
+  string gov_name = 18;
+}
+message ConfirmDisciplinaryRecord {
+  string request_id = 1;
+  bool confirm = 2;
+  optional string notes = 3;
+  optional string citizen_id = 4;
+}
+message GetDisciplinaryRecordRequestID {
+  string request_id = 1;
+}
+
+message RemoveTasksCasesRequest {
+  repeated string case_id = 1;
+  bool with_assign = 2;
+}
+
+message GetDisciplinaryDecisionReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetDisciplinaryDecisionReportsResponse {
+  repeated DisciplinaryDecisionReportItem items = 1;
+}
+message DisciplinaryDecisionReportItem {
+  string disciplinary_decision_id = 1;
+  string disciplinary_decision_name = 2;
+  int64 total_cases = 3;
+  string gov_id = 4;
+  string gov_name = 5;
+  string main_gov_id = 6;
+  string main_gov_name = 7; // المحافظة
+}
+
+message GetVerdictReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetVerdictReportsResponse {
+  repeated VerdictReportItem items = 1;
+}
+message VerdictReportItem {
+  string verdict_id = 1;
+  string verdict_name = 2;
+  int64 total_cases = 3;
+  string gov_id = 4;
+  string gov_name = 5;
+  string main_gov_id = 6;
+  string main_gov_name = 7; // المحافظة
+}
+
+message GetCaseTypesReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetCaseTypesReportsResponse {
+  repeated CaseTypeReportItem items = 1;
+}
+message CaseTypeReportItem {
+  string case_type_id = 1;
+  string case_type_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+}
+
+message GetCrimeTypesReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetCrimeTypesReportsResponse {
+  repeated CrimeTypeReportItem items = 1;
+}
+message CrimeTypeReportItem {
+  string crime_type_id = 1;
+  string crime_type_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+}
+
+message GetCitizenMoreCasesReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+  int64 more_cases_than = 5;
+}
+message GetCitizenMoreCasesReportsResponse {
+  repeated CitizenMoreCasesReportItem items = 1;
+}
+message CitizenMoreCasesReportItem {
+  string id = 1;
+  string national_id = 2; // الرقم الوطني
+  string full_name = 3; // الاسم الكامل
+  string position = 4; // المنصب
+  optional string phone = 5;
+  optional string address = 6;
+  optional int64 birth_date = 7;      // تاريخ الميلاد
+  optional int64 employment_date = 8; // تاريخ التوظيف
+  Gender gender = 9;
+  JobGrade job_grade = 10; //الدرجه الوظبفية
+  int64 total_cases = 11;
+}
+
+message GetJobGradeReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetJobGradeReportsResponse {
+  repeated JobGradeReportItem items = 1;
+}
+message JobGradeReportItem {
+  JobGrade job_grade = 1;
+  string job_grade_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+}
+
+message GetMinistryReportsRequest {
+  optional int64 from_date = 1;
+  optional int64 to_date = 2;
+  optional string main_gov_id = 3; // المحافظة
+}
+message GetMinistryReportsResponse {
+  repeated MinistryReportItem items = 1;
+}
+message MinistryReportItem {
+  string gov_id = 1;
+  string gov_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+}
+
+message GetGenderReportsRequest {
+  optional string gov_id = 1;
+  optional int64 from_date = 2;
+  optional int64 to_date = 3;
+  optional string main_gov_id = 4; // المحافظة
+}
+message GetGenderReportsResponse {
+  repeated GenderReportItem items = 1;
+}
+message GenderReportItem {
+  Gender gender = 1;
+  string gender_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+}
+
+message GetMetaReportsRequest {
+  bool close_only = 1;
+}
+message GetMetaReportsResponse {
+  repeated MetaReportItem items = 1;
+}
+message MetaReportItem {
+  string user_id = 1;
+  string user_name = 2;
+  int64 total_cases = 3;
+  int64 total_citizens = 4;
+  int64 total_pages = 5;
+  int64 total_documents = 6;
+  int64 toal_executions = 7;
+}
+
+message ListSettingsResponse {
+  repeated Setting items = 1;
+}
+message Setting {
+  string key = 1;
+  string value = 2;
+  string description = 3;
+}
+message GetSettingRequest {
+  string key = 1;
+}
+
+message GetCasesInUserTaskRunResponse {
+  repeated CaseInUserTaskRun cases = 1;
+}
+message CaseInUserTaskRun {
+  string case_id = 1;
+  string case_number_ref = 2;
+  string governorate = 3;
+  string prosecution = 4;
+  int64  case_year = 5;
+  string number = 6;
+  int64 year = 7;
+  string governorate_name = 8;
+  string prosecution_name = 9;
+  string site_id = 10;
+  string site_name = 11;
+  RequestType request_type = 12;
+}
+
+message GetDraftRequest {
+  string case_id = 1;
+}
+message DraftRequest {
+  string case_id = 1;
+  string case_request_json = 2;
+  string created_at = 3;
+  string updated_at = 4;
+  string user_id = 5;
+}

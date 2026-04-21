@@ -1,0 +1,108 @@
+┌─────────────────────────────────────────────────────────────────────┐
+│                         gRPC CLIENT                                 │
+│              (e.g. Postman / grpcurl / another service)             │
+└──────────────────────────┬──────────────────────────────────────────┘
+                           │  gRPC requests (TCP :9333)
+                           ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                       cmd/main.go                                   │
+│  • Creates DB connection (database.NewMySQLDB)                      │
+│  • Creates all repositories, services, handlers                     │
+│  • Registers gRPC server with auth.AuthInterceptor middleware       │
+│  • Registers TaskServiceServer  → taskHandler                       │
+│  • Registers UserServiceServer  → authHandler                       │
+└───┬──────────────────┬──────────────────┬───────────────────────────┘
+    │                  │                  │
+    ▼                  ▼                  ▼
+┌──────────────┐  ┌─────────────┐  ┌──────────────────────────────────┐
+│database/     │  │auth/        │  │  service/pb/  (generated stubs)  │
+│mysql.go      │  │middleware.go│  │  users.pb.go  users_grpc.pb.go   │
+│              │  │jwt.go       │  │  task.pb.go   task_grpc.pb.go    │
+│ Opens MySQL  │  │             │  │                                  │
+│ AutoMigrates │  │ Runs BEFORE │  │  Defines message types &         │
+│ User, Task,  │  │ every RPC   │  │  gRPC interfaces that all        │
+│ RefreshToken │  │             │  │  handlers must implement         │
+└──────┬───────┘  └──────┬──────┘  └──────────────────────────────────┘
+       │                 │
+       │ *gorm.DB        │ skips login/RefreshToken
+       │                 │ checks Bearer JWT on all other RPCs
+       │                 │ injects user_id into context
+       │                 │
+       ▼                 ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│                        HANDLER LAYER                                 │
+│                                                                      │
+│  handler/auth_handler.go          handler/task_handler.go            │
+│  ┌────────────────────────┐       ┌──────────────────────┐           │
+│  │ AuthHandler            │       │ TaskHandler          │           │
+│  │  • Login               │       │  • CreateTask        │           │
+│  │  • RefreshToken        │       │  • ListTasks         │           │
+│  │  • CreateUser          │       │  • FindTasks         │           │
+│  │  • GetUser             │       └──────────┬───────────┘           │
+│  │  • ListUsers           │                  │                       │
+│  └────────┬───────────────┘                  │                       │
+│           │ uses                             │ uses                  │
+│           ▼                                  ▼                       │
+└──────────────────────────────────────────────────────────────────────┘
+            │                                  │
+  ┌─────────┴────────┐               ┌─────────┴─────────┐
+  │                  │               │                   │
+  ▼                  ▼               ▼                   │
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │
+│service/      │ │service/      │ │service/      │       │
+│auth_service  │ │user_service  │ │task_service  │       │
+│              │ │              │ │              │       │
+│ Login()      │ │ CreateUser() │ │ Create()     │       │
+│  → fetch by  │ │  → bcrypt    │ │ List()       │       │
+│    email     │ │    hash pwd  │ │ FindByID()   │       │
+│  → bcrypt    │ │ GetUser()    │ └──────┬───────┘       │
+│    verify    │ │ ListUsers()  │        │               │
+│ RefreshToken │ └──────┬───────┘        │               │
+│  → validate  │        │                │               │
+│    JWT       │        │                │               │
+│  → new tokens│        │ uses           │ uses          │
+└──────┬───────┘        │                │               │
+       │ uses           │                │               │
+       │                │                │               │
+       └────────┬───────┘                │               │
+                ▼                        ▼               │
+┌───────────────────────────┐  ┌──────────────────────┐  │
+│ repository/               │  │ repository/          │  │
+│ user_repsitory.go         │  │ task_repository.go   │  │
+│                           │  │                      │  │
+│ Login(email)              │  │ Create()             │  │
+│ Create(user)              │  │ List()               │  │
+│ GetUser(id)               │  │ FindByID(id)         │  │
+│ ListUsers()               │  └──────────┬───────────┘  │
+└──────────────┬────────────┘             │              │
+               │ uses *gorm.DB            │ uses *gorm.DB│
+               └──────────┬───────────────┘              │
+                          ▼                              │
+              ┌───────────────────────┐                  │
+              │ database/mysql.go     │◄─────────────────┘
+              │                       │  (db created here,
+              │ gorm.DB (MySQL)       │   passed to all repos)
+              └───────────────────────┘
+                          │
+                          ▼
+              ┌───────────────────────┐
+              │    MySQL Database     │
+              │  tables:              │
+              │  • users              │
+              │  • tasks              │
+              │  • refresh_tokens     │
+              └───────────────────────┘
+
+              model/ (plain structs, no logic)
+              ┌──────────────┬──────────────┬────────────────┐
+              │ users.go     │ task.go      │refresh_tokens.go│
+              │ User struct  │ Task struct  │RefreshToken     │
+              └──────────────┴──────────────┴────────────────┘
+              Used by: repositories, services, handlers
+
+              auth/jwt.go  (pure functions, no dependencies)
+              ┌──────────────────────────────────────────┐
+              │ GenerateToken(userID, duration) → string │
+              │ ValidateToken(tokenStr) → *jwt.Token     │
+              └──────────────────────────────────────────┘
+              Used by: auth_service, middleware

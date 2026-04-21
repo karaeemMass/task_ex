@@ -3,13 +3,18 @@ package main
 import (
 	"log"
 	"net"
-	"task_ex/internal/interceptor"
+	"os"
+	"strings"
+
+	//"task_ex/internal/interceptor"
 
 	"google.golang.org/grpc"
 
 	"task_ex/internal/database"
 	"task_ex/internal/handler"
 
+	"task_ex/internal/auth"
+	redisconfig "task_ex/internal/infrastructure/redis"
 	"task_ex/internal/repository"
 	"task_ex/internal/service"
 	pb "task_ex/service/pb"
@@ -20,20 +25,48 @@ func main() {
 
 	repo := repository.NewTaskRepository(db)
 	svc := service.NewTaskService(repo)
-	handler := handler.NewTaskHandler(svc)
+	taskHandler := handler.NewTaskHandler(svc)
 
-	port := ":9080"
+	userRepo := repository.NewUserRepository(db)
+	redisClient, err := redisconfig.NewRedisClient()
+	if err != nil {
+		log.Printf("redis unavailable, continuing without cache/session store: %v", err)
+	}
+
+	authSvc := service.NewAuthService(userRepo, &auth.JWT{}, redisClient)
+	userSvc := service.NewUserService(userRepo, &auth.JWT{})
+	authHandler := handler.NewAuthHandler(authSvc, userSvc)
+
+	port := os.Getenv("GRPC_PORT")
+	if port == "" {
+		port = ":9333"
+	}
+	if !strings.HasPrefix(port, ":") {
+		port = ":" + port
+	}
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("unable to listen on %s: %v", port, err)
+		log.Print("falling back to an auto-selected free TCP port")
+
+		lis, err = net.Listen("tcp", ":0")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(interceptor.AuthInterceptor),
+		grpc.UnaryInterceptor(auth.AuthInterceptor),
 	)
-	pb.RegisterTaskServiceServer(grpcServer, handler)
+	pb.RegisterTaskServiceServer(grpcServer, taskHandler)
+	pb.RegisterUserServiceServer(grpcServer, authHandler)
 
-	log.Println("gRPC server running on port", port)
+	service.GetGoldPrice()
+
+	log.Println("gRPC server running on", lis.Addr().String())
+
 	grpcServer.Serve(lis)
+	
+
 }
