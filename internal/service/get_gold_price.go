@@ -41,6 +41,7 @@ func GetGoldPrice() {
 	req.Header.Add("x-api-key", "sk_8F58a63Df5eeC3E1BD910aEa1673FA112Dd887Ca9E4aFe9B")
 
 	res, err := client.Do(req)
+
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -53,12 +54,16 @@ func GetGoldPrice() {
 
 		return
 	}
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
 
-	// var result ApiResponse
-	// err = json.NewDecoder(res.Body).Decode(&result)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(err)
+	var result ApiResponse;
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+	    panic(err)
+	}
+	//fmt.Println(result.Data.MetalPrices["XAU"].Price)
+	//fmt.Println(result.Data.MetalPrices["XAU"])
+	//fmt.Println(result.Data)
+	//fmt.Println(result)
+
 }
