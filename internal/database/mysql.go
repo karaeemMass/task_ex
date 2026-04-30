@@ -32,6 +32,11 @@ func NewMySQLDB() (*gorm.DB, error) {
 	if err := db.AutoMigrate(&model.RefreshToken{}); err != nil {
 		return nil, err
 	}
+	
+	if err := db.AutoMigrate(&model.PricesGold{}); err != nil {
+		return nil, err
+	}
+
 
 	return db, nil
 }

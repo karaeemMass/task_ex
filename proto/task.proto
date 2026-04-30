@@ -2,12 +2,15 @@ syntax = "proto3";
 
 package tasks;
 
+//import "google/protobuf/descriptor.proto";
+
 option go_package = "service/pb;pb";
 
 service TaskService {
-  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
-  rpc ListTasks (ListTasksRequest) returns (ListTasksResponse);
-  rpc FindTasks (FindTasksRequest) returns (FindTasksResponse);
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+  rpc FindTasks(FindTasksRequest) returns (FindTasksResponse);
+  rpc GoldPrice(Empty) returns (GoldPriceResponse);
 }
 
 message Task {
@@ -29,7 +32,7 @@ message CreateTaskResponse {
 message ListTasksResponse {
   repeated Task tasks = 1;
 }
-message ListTasksRequest{}
+message ListTasksRequest {}
 
 message FindTasksRequest {
   int32 id = 1;
@@ -37,4 +40,28 @@ message FindTasksRequest {
 
 message FindTasksResponse {
   repeated Task tasks = 1;
+}
+
+message Empty {}
+
+message GoldPriceResponse {
+  uint64 id = 1;
+
+  double price_main = 2;
+  double price_before = 3;
+  string count = 4;
+  int64 date = 5;
+  string base_currency = 6;
+  string weight_unit = 7;
+  string weight_name = 8;
+  double open = 9;
+  double high = 10;
+  double low = 11;
+  double prev = 12;
+  double change = 13;
+  float change_percentage = 14;
+  double price_24k = 15;
+  double price_22k = 16;
+  double price_21k = 17;
+  double price_20k = 18;
 }

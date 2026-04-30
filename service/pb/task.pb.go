@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.3
-// source: proto/task.proto
+// source: task.proto
 
 package pb
 
@@ -33,7 +33,7 @@ type Task struct {
 
 func (x *Task) Reset() {
 	*x = Task{}
-	mi := &file_proto_task_proto_msgTypes[0]
+	mi := &file_task_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +45,7 @@ func (x *Task) String() string {
 func (*Task) ProtoMessage() {}
 
 func (x *Task) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[0]
+	mi := &file_task_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *Task) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Task.ProtoReflect.Descriptor instead.
 func (*Task) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{0}
+	return file_task_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Task) GetId() int32 {
@@ -99,7 +99,7 @@ type CreateTaskRequest struct {
 
 func (x *CreateTaskRequest) Reset() {
 	*x = CreateTaskRequest{}
-	mi := &file_proto_task_proto_msgTypes[1]
+	mi := &file_task_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -111,7 +111,7 @@ func (x *CreateTaskRequest) String() string {
 func (*CreateTaskRequest) ProtoMessage() {}
 
 func (x *CreateTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[1]
+	mi := &file_task_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -124,7 +124,7 @@ func (x *CreateTaskRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTaskRequest.ProtoReflect.Descriptor instead.
 func (*CreateTaskRequest) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{1}
+	return file_task_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateTaskRequest) GetTitle() string {
@@ -150,7 +150,7 @@ type CreateTaskResponse struct {
 
 func (x *CreateTaskResponse) Reset() {
 	*x = CreateTaskResponse{}
-	mi := &file_proto_task_proto_msgTypes[2]
+	mi := &file_task_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -162,7 +162,7 @@ func (x *CreateTaskResponse) String() string {
 func (*CreateTaskResponse) ProtoMessage() {}
 
 func (x *CreateTaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[2]
+	mi := &file_task_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,7 +175,7 @@ func (x *CreateTaskResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTaskResponse.ProtoReflect.Descriptor instead.
 func (*CreateTaskResponse) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{2}
+	return file_task_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateTaskResponse) GetId() int32 {
@@ -194,7 +194,7 @@ type ListTasksResponse struct {
 
 func (x *ListTasksResponse) Reset() {
 	*x = ListTasksResponse{}
-	mi := &file_proto_task_proto_msgTypes[3]
+	mi := &file_task_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -206,7 +206,7 @@ func (x *ListTasksResponse) String() string {
 func (*ListTasksResponse) ProtoMessage() {}
 
 func (x *ListTasksResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[3]
+	mi := &file_task_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -219,7 +219,7 @@ func (x *ListTasksResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTasksResponse.ProtoReflect.Descriptor instead.
 func (*ListTasksResponse) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{3}
+	return file_task_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListTasksResponse) GetTasks() []*Task {
@@ -237,7 +237,7 @@ type ListTasksRequest struct {
 
 func (x *ListTasksRequest) Reset() {
 	*x = ListTasksRequest{}
-	mi := &file_proto_task_proto_msgTypes[4]
+	mi := &file_task_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -249,7 +249,7 @@ func (x *ListTasksRequest) String() string {
 func (*ListTasksRequest) ProtoMessage() {}
 
 func (x *ListTasksRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[4]
+	mi := &file_task_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -262,7 +262,7 @@ func (x *ListTasksRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListTasksRequest.ProtoReflect.Descriptor instead.
 func (*ListTasksRequest) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{4}
+	return file_task_proto_rawDescGZIP(), []int{4}
 }
 
 type FindTasksRequest struct {
@@ -274,7 +274,7 @@ type FindTasksRequest struct {
 
 func (x *FindTasksRequest) Reset() {
 	*x = FindTasksRequest{}
-	mi := &file_proto_task_proto_msgTypes[5]
+	mi := &file_task_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -286,7 +286,7 @@ func (x *FindTasksRequest) String() string {
 func (*FindTasksRequest) ProtoMessage() {}
 
 func (x *FindTasksRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[5]
+	mi := &file_task_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -299,7 +299,7 @@ func (x *FindTasksRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindTasksRequest.ProtoReflect.Descriptor instead.
 func (*FindTasksRequest) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{5}
+	return file_task_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *FindTasksRequest) GetId() int32 {
@@ -318,7 +318,7 @@ type FindTasksResponse struct {
 
 func (x *FindTasksResponse) Reset() {
 	*x = FindTasksResponse{}
-	mi := &file_proto_task_proto_msgTypes[6]
+	mi := &file_task_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -330,7 +330,7 @@ func (x *FindTasksResponse) String() string {
 func (*FindTasksResponse) ProtoMessage() {}
 
 func (x *FindTasksResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_task_proto_msgTypes[6]
+	mi := &file_task_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -343,7 +343,7 @@ func (x *FindTasksResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FindTasksResponse.ProtoReflect.Descriptor instead.
 func (*FindTasksResponse) Descriptor() ([]byte, []int) {
-	return file_proto_task_proto_rawDescGZIP(), []int{6}
+	return file_task_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *FindTasksResponse) GetTasks() []*Task {
@@ -353,11 +353,228 @@ func (x *FindTasksResponse) GetTasks() []*Task {
 	return nil
 }
 
-var File_proto_task_proto protoreflect.FileDescriptor
+type Empty struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_proto_task_proto_rawDesc = "" +
+func (x *Empty) Reset() {
+	*x = Empty{}
+	mi := &file_task_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_task_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_task_proto_rawDescGZIP(), []int{7}
+}
+
+type GoldPriceResponse struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	PriceMain        float64                `protobuf:"fixed64,2,opt,name=price_main,json=priceMain,proto3" json:"price_main,omitempty"`
+	PriceBefore      float64                `protobuf:"fixed64,3,opt,name=price_before,json=priceBefore,proto3" json:"price_before,omitempty"`
+	Count            string                 `protobuf:"bytes,4,opt,name=count,proto3" json:"count,omitempty"`
+	Date             int64                  `protobuf:"varint,5,opt,name=date,proto3" json:"date,omitempty"`
+	BaseCurrency     string                 `protobuf:"bytes,6,opt,name=base_currency,json=baseCurrency,proto3" json:"base_currency,omitempty"`
+	WeightUnit       string                 `protobuf:"bytes,7,opt,name=weight_unit,json=weightUnit,proto3" json:"weight_unit,omitempty"`
+	WeightName       string                 `protobuf:"bytes,8,opt,name=weight_name,json=weightName,proto3" json:"weight_name,omitempty"`
+	Open             float64                `protobuf:"fixed64,9,opt,name=open,proto3" json:"open,omitempty"`
+	High             float64                `protobuf:"fixed64,10,opt,name=high,proto3" json:"high,omitempty"`
+	Low              float64                `protobuf:"fixed64,11,opt,name=low,proto3" json:"low,omitempty"`
+	Prev             float64                `protobuf:"fixed64,12,opt,name=prev,proto3" json:"prev,omitempty"`
+	Change           float64                `protobuf:"fixed64,13,opt,name=change,proto3" json:"change,omitempty"`
+	ChangePercentage float32                `protobuf:"fixed32,14,opt,name=change_percentage,json=changePercentage,proto3" json:"change_percentage,omitempty"`
+	Price_24K        float64                `protobuf:"fixed64,15,opt,name=price_24k,json=price24k,proto3" json:"price_24k,omitempty"`
+	Price_22K        float64                `protobuf:"fixed64,16,opt,name=price_22k,json=price22k,proto3" json:"price_22k,omitempty"`
+	Price_21K        float64                `protobuf:"fixed64,17,opt,name=price_21k,json=price21k,proto3" json:"price_21k,omitempty"`
+	Price_20K        float64                `protobuf:"fixed64,18,opt,name=price_20k,json=price20k,proto3" json:"price_20k,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *GoldPriceResponse) Reset() {
+	*x = GoldPriceResponse{}
+	mi := &file_task_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GoldPriceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GoldPriceResponse) ProtoMessage() {}
+
+func (x *GoldPriceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_task_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GoldPriceResponse.ProtoReflect.Descriptor instead.
+func (*GoldPriceResponse) Descriptor() ([]byte, []int) {
+	return file_task_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GoldPriceResponse) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPriceMain() float64 {
+	if x != nil {
+		return x.PriceMain
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPriceBefore() float64 {
+	if x != nil {
+		return x.PriceBefore
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetCount() string {
+	if x != nil {
+		return x.Count
+	}
+	return ""
+}
+
+func (x *GoldPriceResponse) GetDate() int64 {
+	if x != nil {
+		return x.Date
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetBaseCurrency() string {
+	if x != nil {
+		return x.BaseCurrency
+	}
+	return ""
+}
+
+func (x *GoldPriceResponse) GetWeightUnit() string {
+	if x != nil {
+		return x.WeightUnit
+	}
+	return ""
+}
+
+func (x *GoldPriceResponse) GetWeightName() string {
+	if x != nil {
+		return x.WeightName
+	}
+	return ""
+}
+
+func (x *GoldPriceResponse) GetOpen() float64 {
+	if x != nil {
+		return x.Open
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetHigh() float64 {
+	if x != nil {
+		return x.High
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetLow() float64 {
+	if x != nil {
+		return x.Low
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPrev() float64 {
+	if x != nil {
+		return x.Prev
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetChange() float64 {
+	if x != nil {
+		return x.Change
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetChangePercentage() float32 {
+	if x != nil {
+		return x.ChangePercentage
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPrice_24K() float64 {
+	if x != nil {
+		return x.Price_24K
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPrice_22K() float64 {
+	if x != nil {
+		return x.Price_22K
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPrice_21K() float64 {
+	if x != nil {
+		return x.Price_21K
+	}
+	return 0
+}
+
+func (x *GoldPriceResponse) GetPrice_20K() float64 {
+	if x != nil {
+		return x.Price_20K
+	}
+	return 0
+}
+
+var File_task_proto protoreflect.FileDescriptor
+
+const file_task_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/task.proto\x12\x05tasks\"l\n" +
+	"\n" +
+	"task.proto\x12\x05tasks\"l\n" +
 	"\x04Task\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12 \n" +
@@ -374,27 +591,52 @@ const file_proto_task_proto_rawDesc = "" +
 	"\x10FindTasksRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\"6\n" +
 	"\x11FindTasksResponse\x12!\n" +
-	"\x05tasks\x18\x01 \x03(\v2\v.tasks.TaskR\x05tasks2\xd0\x01\n" +
+	"\x05tasks\x18\x01 \x03(\v2\v.tasks.TaskR\x05tasks\"\a\n" +
+	"\x05Empty\"\xfd\x03\n" +
+	"\x11GoldPriceResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x1d\n" +
+	"\n" +
+	"price_main\x18\x02 \x01(\x01R\tpriceMain\x12!\n" +
+	"\fprice_before\x18\x03 \x01(\x01R\vpriceBefore\x12\x14\n" +
+	"\x05count\x18\x04 \x01(\tR\x05count\x12\x12\n" +
+	"\x04date\x18\x05 \x01(\x03R\x04date\x12#\n" +
+	"\rbase_currency\x18\x06 \x01(\tR\fbaseCurrency\x12\x1f\n" +
+	"\vweight_unit\x18\a \x01(\tR\n" +
+	"weightUnit\x12\x1f\n" +
+	"\vweight_name\x18\b \x01(\tR\n" +
+	"weightName\x12\x12\n" +
+	"\x04open\x18\t \x01(\x01R\x04open\x12\x12\n" +
+	"\x04high\x18\n" +
+	" \x01(\x01R\x04high\x12\x10\n" +
+	"\x03low\x18\v \x01(\x01R\x03low\x12\x12\n" +
+	"\x04prev\x18\f \x01(\x01R\x04prev\x12\x16\n" +
+	"\x06change\x18\r \x01(\x01R\x06change\x12+\n" +
+	"\x11change_percentage\x18\x0e \x01(\x02R\x10changePercentage\x12\x1b\n" +
+	"\tprice_24k\x18\x0f \x01(\x01R\bprice24k\x12\x1b\n" +
+	"\tprice_22k\x18\x10 \x01(\x01R\bprice22k\x12\x1b\n" +
+	"\tprice_21k\x18\x11 \x01(\x01R\bprice21k\x12\x1b\n" +
+	"\tprice_20k\x18\x12 \x01(\x01R\bprice20k2\x85\x02\n" +
 	"\vTaskService\x12A\n" +
 	"\n" +
 	"CreateTask\x12\x18.tasks.CreateTaskRequest\x1a\x19.tasks.CreateTaskResponse\x12>\n" +
 	"\tListTasks\x12\x17.tasks.ListTasksRequest\x1a\x18.tasks.ListTasksResponse\x12>\n" +
-	"\tFindTasks\x12\x17.tasks.FindTasksRequest\x1a\x18.tasks.FindTasksResponseB\x0fZ\rservice/pb;pbb\x06proto3"
+	"\tFindTasks\x12\x17.tasks.FindTasksRequest\x1a\x18.tasks.FindTasksResponse\x123\n" +
+	"\tGoldPrice\x12\f.tasks.Empty\x1a\x18.tasks.GoldPriceResponseB\x0fZ\rservice/pb;pbb\x06proto3"
 
 var (
-	file_proto_task_proto_rawDescOnce sync.Once
-	file_proto_task_proto_rawDescData []byte
+	file_task_proto_rawDescOnce sync.Once
+	file_task_proto_rawDescData []byte
 )
 
-func file_proto_task_proto_rawDescGZIP() []byte {
-	file_proto_task_proto_rawDescOnce.Do(func() {
-		file_proto_task_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_task_proto_rawDesc), len(file_proto_task_proto_rawDesc)))
+func file_task_proto_rawDescGZIP() []byte {
+	file_task_proto_rawDescOnce.Do(func() {
+		file_task_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_task_proto_rawDesc), len(file_task_proto_rawDesc)))
 	})
-	return file_proto_task_proto_rawDescData
+	return file_task_proto_rawDescData
 }
 
-var file_proto_task_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_proto_task_proto_goTypes = []any{
+var file_task_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_task_proto_goTypes = []any{
 	(*Task)(nil),               // 0: tasks.Task
 	(*CreateTaskRequest)(nil),  // 1: tasks.CreateTaskRequest
 	(*CreateTaskResponse)(nil), // 2: tasks.CreateTaskResponse
@@ -402,43 +644,47 @@ var file_proto_task_proto_goTypes = []any{
 	(*ListTasksRequest)(nil),   // 4: tasks.ListTasksRequest
 	(*FindTasksRequest)(nil),   // 5: tasks.FindTasksRequest
 	(*FindTasksResponse)(nil),  // 6: tasks.FindTasksResponse
+	(*Empty)(nil),              // 7: tasks.Empty
+	(*GoldPriceResponse)(nil),  // 8: tasks.GoldPriceResponse
 }
-var file_proto_task_proto_depIdxs = []int32{
+var file_task_proto_depIdxs = []int32{
 	0, // 0: tasks.ListTasksResponse.tasks:type_name -> tasks.Task
 	0, // 1: tasks.FindTasksResponse.tasks:type_name -> tasks.Task
 	1, // 2: tasks.TaskService.CreateTask:input_type -> tasks.CreateTaskRequest
 	4, // 3: tasks.TaskService.ListTasks:input_type -> tasks.ListTasksRequest
 	5, // 4: tasks.TaskService.FindTasks:input_type -> tasks.FindTasksRequest
-	2, // 5: tasks.TaskService.CreateTask:output_type -> tasks.CreateTaskResponse
-	3, // 6: tasks.TaskService.ListTasks:output_type -> tasks.ListTasksResponse
-	6, // 7: tasks.TaskService.FindTasks:output_type -> tasks.FindTasksResponse
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
+	7, // 5: tasks.TaskService.GoldPrice:input_type -> tasks.Empty
+	2, // 6: tasks.TaskService.CreateTask:output_type -> tasks.CreateTaskResponse
+	3, // 7: tasks.TaskService.ListTasks:output_type -> tasks.ListTasksResponse
+	6, // 8: tasks.TaskService.FindTasks:output_type -> tasks.FindTasksResponse
+	8, // 9: tasks.TaskService.GoldPrice:output_type -> tasks.GoldPriceResponse
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_proto_task_proto_init() }
-func file_proto_task_proto_init() {
-	if File_proto_task_proto != nil {
+func init() { file_task_proto_init() }
+func file_task_proto_init() {
+	if File_task_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_task_proto_rawDesc), len(file_proto_task_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_task_proto_rawDesc), len(file_task_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_task_proto_goTypes,
-		DependencyIndexes: file_proto_task_proto_depIdxs,
-		MessageInfos:      file_proto_task_proto_msgTypes,
+		GoTypes:           file_task_proto_goTypes,
+		DependencyIndexes: file_task_proto_depIdxs,
+		MessageInfos:      file_task_proto_msgTypes,
 	}.Build()
-	File_proto_task_proto = out.File
-	file_proto_task_proto_goTypes = nil
-	file_proto_task_proto_depIdxs = nil
+	File_task_proto = out.File
+	file_task_proto_goTypes = nil
+	file_task_proto_depIdxs = nil
 }

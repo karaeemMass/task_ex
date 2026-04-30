@@ -1,24 +1,23 @@
 package model
 
-//import "gorm.io/gorm"
 
-type price struct {
-	ID                uint `gorm:"primaryKey"`
-	PriceMain         float64
-	PriceBefore       float64
-	Cunt              string
-	Date              int64
-	BaseCurrency      string
-	WeightUnit        string
-	weightName        string
-	open              float64
-	high              float64
-	low               float64
-	prev              float64
-	change            float64
-	change_percentage float32
-	price_24k         float64
-	price_22k         float64
-	price_21k         float64
-	price_20k         float64
+type PricesGold struct {
+	ID               uint `gorm:"primaryKey"`
+	PriceMain        float64
+	PriceBefore      float64
+	Cunt             string
+	Date             int64
+	BaseCurrency     string
+	WeightUnit       string
+	WeightName       string
+	Open             float64
+	High             float64
+	Low              float64
+	Prev             float64
+	Change           float64
+	ChangePercentage float32
+	Price24k         float64
+	Price22k         float64
+	Price21k         float64
+	Price18k         float64
 }

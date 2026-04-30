@@ -61,9 +61,6 @@ func GetGoldPrice() {
 	if err != nil {
 	    panic(err)
 	}
-	//fmt.Println(result.Data.MetalPrices["XAU"].Price)
-	//fmt.Println(result.Data.MetalPrices["XAU"])
-	//fmt.Println(result.Data)
-	//fmt.Println(result)
+
 
 }
