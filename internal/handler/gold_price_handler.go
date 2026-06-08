@@ -1,37 +1,35 @@
-/*
-package handler
+/*package handler
 
 import (
-
 	"fmt"
 	"task_ex/internal/service"
 	"task_ex/service/pb"
-
 )
 
-	type GoldPrice struct{
-		pb.UnimplementedTaskServiceServer
-		Goldservice *service.GetGoldPrice
-	}
+type GoldPrice struct{
+	pb.UnimplementedTaskServiceServer
+	Goldservice *service.GetGoldPrice
+} 
 
-	func newGoldPriceHandler (Goldservice *service.GetGoldPrice) *GoldPrice{
-		fmt.Println("f")
-		return &GoldPrice{Goldservice: Goldservice}
-
+func newGoldPriceHandler (Goldservice *service.GetGoldPrice) *GoldPrice{
+	fmt.Println("f")
+	return &GoldPrice{Goldservice: Goldservice}
+	
 }
 */
 package handler
 
 import (
-	"task_ex/internal/service"
-	"task_ex/service/pb"
+    "task_ex/internal/service"
+    "task_ex/service/pb"
 )
 
 type GoldPrice struct {
-	pb.UnimplementedTaskServiceServer
-	Goldservice service.GetGoldPriceFunc
+    pb.UnimplementedTaskServiceServer
+    Goldservice *service.ApiResponse
 }
 
-func newGoldPriceHandler(gs service.GetGoldPriceFunc) *GoldPrice {
-	return &GoldPrice{Goldservice: gs}
+func newGoldPriceHandler(gs *service.ApiResponse) *GoldPrice {
+    return &GoldPrice{Goldservice: gs}
 }
+

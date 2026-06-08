@@ -51,7 +51,7 @@ func GetGoldPrice() {
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
-
+  
 		return
 	}
 	//fmt.Println(string(body))

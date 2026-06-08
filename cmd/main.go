@@ -56,17 +56,19 @@ func main() {
 		}
 	}
 
+	// auth jwt token
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(auth.AuthInterceptor),
 	)
 	pb.RegisterTaskServiceServer(grpcServer, taskHandler)
 	pb.RegisterUserServiceServer(grpcServer, authHandler)
 
+	// service gold price
 	service.GetGoldPrice()
 
+	// server port
 	log.Println("gRPC server running on", lis.Addr().String())
 
 	grpcServer.Serve(lis)
-	
 
 }
